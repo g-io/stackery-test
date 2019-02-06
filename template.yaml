@@ -17,7 +17,7 @@ Resources:
       CodeUri: src/LambdaStep001
       Handler: handler.handler
       Runtime: python3.6
-      MemorySize: 3008
+      MemorySize: 128
       Timeout: 30
       Tracing: Active
       Policies:
@@ -48,7 +48,7 @@ Resources:
       CodeUri: src/LambdaStep002
       Handler: handler.handler
       Runtime: python3.6
-      MemorySize: 3008
+      MemorySize: 128
       Timeout: 30
       Tracing: Active
       Policies:
@@ -77,7 +77,7 @@ Resources:
       CodeUri: src/LambdaStep003
       Handler: handler.handler
       Runtime: python3.6
-      MemorySize: 3008
+      MemorySize: 128
       Timeout: 30
       Tracing: Active
       Policies:
