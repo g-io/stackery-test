@@ -1,3 +1,43 @@
-AWSTemplateFormatVersion: '2010-09-09'
-Transform: 'AWS::Serverless-2016-10-31'
-Resources: {}
+AWSTemplateFormatVersion: 2010-09-09
+Transform: AWS::Serverless-2016-10-31
+Resources:
+  StackeryTestBucket0001:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Sub ${AWS::StackName}-stackerytestbucket0001
+    Metadata:
+      StackeryName: s31
+  StackerTestLambda0001:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-StackerTestLambda0001
+      Description: !Sub
+        - Stack ${StackTagName} Environment ${EnvironmentTagName} StackerTestLambda0001 ${ResourceName}
+        - ResourceName: lambda1
+      CodeUri: src/StackerTestLambda0001
+      Handler: handler.handler
+      Runtime: python3.6
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+      Events:
+        ObjectStore:
+          Type: S3
+          Properties:
+            Bucket: !Ref StackeryTestBucket0001
+            Events:
+              - s3:ObjectCreated:*
+              - s3:ObjectRemoved:*
+      Environment:
+        Variables: {}
+    Metadata:
+      StackeryName: lambda1
+Parameters:
+  StackTagName:
+    Type: String
+    Description: Stack Name (injected by Stackery at deployment time)
+  EnvironmentTagName:
+    Type: String
+    Description: Environment Name (injected by Stackery at deployment time)
