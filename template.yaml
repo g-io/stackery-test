@@ -7,6 +7,41 @@ Resources:
       BucketName: !Sub ${AWS::StackName}-stackerytestbucket0001
     Metadata:
       StackeryName: s3-input
+  LambdaStep001:
+    Type: AWS::Serverless::Function
+    Properties:
+      FunctionName: !Sub ${AWS::StackName}-LambdaStep001
+      Description: !Sub
+        - Stack ${StackTagName} Environment ${EnvironmentTagName} LambdaStep001 ${ResourceName}
+        - ResourceName: Lambda Step 1
+      CodeUri: src/LambdaStep001
+      Handler: handler.handler
+      Runtime: python3.6
+      MemorySize: 3008
+      Timeout: 30
+      Tracing: Active
+      Policies:
+        - AWSXrayWriteOnlyAccess
+        - S3CrudPolicy:
+            BucketName: !Ref StackeryTestBucket0001
+      Events:
+        ObjectStore:
+          Type: S3
+          Properties:
+            Bucket: !Ref StackeryTestBucket0001
+            Events:
+              - s3:ObjectCreated:*
+            Filter:
+              S3Key:
+                Rules:
+                  - Name: prefix
+                    Value: step001/
+      Environment:
+        Variables:
+          BUCKET_NAME: !Ref StackeryTestBucket0001
+          BUCKET_ARN: !GetAtt StackeryTestBucket0001.Arn
+    Metadata:
+      StackeryName: Lambda Step 1
   LambdaStep002:
     Type: AWS::Serverless::Function
     Properties:
@@ -77,41 +112,6 @@ Resources:
           BUCKET_ARN: !GetAtt StackeryTestBucket0001.Arn
     Metadata:
       StackeryName: Lambda step 3
-  LambdaStep001:
-    Type: AWS::Serverless::Function
-    Properties:
-      FunctionName: !Sub ${AWS::StackName}-LambdaStep001
-      Description: !Sub
-        - Stack ${StackTagName} Environment ${EnvironmentTagName} LambdaStep001 ${ResourceName}
-        - ResourceName: Lambda Step 1
-      CodeUri: src/LambdaStep001
-      Handler: handler.handler
-      Runtime: python3.6
-      MemorySize: 3008
-      Timeout: 30
-      Tracing: Active
-      Policies:
-        - AWSXrayWriteOnlyAccess
-        - S3CrudPolicy:
-            BucketName: !Ref StackeryTestBucket0001
-      Events:
-        ObjectStore:
-          Type: S3
-          Properties:
-            Bucket: !Ref StackeryTestBucket0001
-            Events:
-              - s3:ObjectCreated:*
-            Filter:
-              S3Key:
-                Rules:
-                  - Name: prefix
-                    Value: step001/
-      Environment:
-        Variables:
-          BUCKET_NAME: !Ref StackeryTestBucket0001
-          BUCKET_ARN: !GetAtt StackeryTestBucket0001.Arn
-    Metadata:
-      StackeryName: Lambda Step 1
 Parameters:
   StackTagName:
     Type: String
