@@ -30,7 +30,10 @@ Resources:
             Events:
               - s3:ObjectCreated:*
             Filter:
-              S3Key: step002/
+              S3Key:
+                Rules:
+                  - Name: prefix
+                    Value: step002/
     Metadata:
       StackeryName: Lambda step 2
   LambdaStep003:
@@ -56,7 +59,10 @@ Resources:
             Events:
               - s3:ObjectCreated:*
             Filter:
-              S3Key: step003/
+              S3Key:
+                Rules:
+                  - Name: prefix
+                    Value: step003/
     Metadata:
       StackeryName: Lambda step 3
   LambdaStep001:
@@ -82,7 +88,10 @@ Resources:
             Events:
               - s3:ObjectCreated:*
             Filter:
-              S3Key: step001/
+              S3Key:
+                Rules:
+                  - Name: prefix
+                    Value: step001/
       Environment:
         Variables: {}
     Metadata:
